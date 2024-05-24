@@ -8,20 +8,22 @@ class MiddlewareExemple:
 
     def __call__(self, request):
         response = self.get_response(request)
-        data = json.loads(request.body)
-        connected = data.get('connected')
-        path = request.path
 
-        if path in ['/api/login', "/"]:
-            if connected == True:
-        
-                return JsonResponse({'status' : 'middleware', 
-                                    "message" : 'block by middleware, allready connected',
-                                    'connected':connected,
-                                    'path': path})
-            else:
-                return response
+        if request.method == 'POST':
+            data = json.loads(request.body)
+            connected = data.get('connected')
+            path = request.path
+
+            if path in ['/api/login', "/"]:
+                if connected == True:
             
+                    return JsonResponse({'status' : 'middleware', 
+                                        "message" : 'block by middleware, allready connected',
+                                        'connected':connected,
+                                        'path': path})
+                else:
+                    return response
+        return response
             
       
 
